@@ -1,38 +1,88 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { Img, Li } from './ImageGalleryItem.styled';
-import Modal from '../Modal';
+import SearchBar from '../Searchbar';
+import { useEffect, useRef, useState } from 'react';
+import * as API from '../../services/UnsplashApi';
+import { ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import ImageGallery from '../ImageGallery';
+import Button from '../Button';
+import Loader from '../Loader';
 
-const ImageGalleryItem = React.forwardRef(function ImageGalleryItem({ image }, ref) {
-  const [showModal, setShowModal] = useState(false);
-
-  const toggleModal = () => {
-    setShowModal((prev) => !prev)
-  }
+const App = () => {
+  const [searchName, setSearchName] = useState('');
+  const [images, setImages] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   
-  return (
-    <Li ref={ref}>
-      <Img src={image.webformatURL} alt={image.tags} onClick={toggleModal} />
-      {showModal && (
-        <Modal
-          largeImageURL={image.largeImageURL}
-          tags={image.tags}
-          onClose={toggleModal}
-        />
-      )}
-    </Li>
-  )
-});
+  const galleryRef = useRef(null);
+  const firstNewElementRef = useRef(null);
 
-ImageGalleryItem.propTypes = {
-  image: PropTypes.shape({
-    webformatURL: PropTypes.string.isRequired,
-    tags: PropTypes.string.isRequired,
-    largeImageURL: PropTypes.string.isRequired,
-  }).isRequired,
+  useEffect(() => {
+    if (searchName === '') {
+      return;
+    }
+
+    async function addImages() {
+      try {
+        setIsLoading(true);
+
+        const data = await API.getImages(searchName, currentPage);
+        
+        if (data.results.length === 0) {
+          return toast.info('Image not found... 🙁', {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+        
+        setImages((prev) => {
+          const newImages = [...prev, ...data.results];
+          
+          if (firstNewElementRef.current) {
+            setTimeout(() => {
+              firstNewElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 0);
+          }
+
+          return newImages;
+        });
+
+        setIsLoading(false);
+        setTotalPages(Math.ceil(data.total_pages / 12));
+
+      } catch {
+        toast.error('Something went wrong 😿', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    addImages();
+  }, [currentPage, searchName]);
+
+  const handleSubmit = data => {
+    setSearchName(data);
+    setImages([]);
+    setCurrentPage(1);
+  };
+
+  const loadMore = () => {
+    setCurrentPage(prev => prev + 1);
+  };
+
+  return (
+    <div>
+      <SearchBar onSubmit={handleSubmit} />
+       
+      <ImageGallery images={images} galleryRef={galleryRef} firstNewElementRef={firstNewElementRef} />
+        
+      {isLoading && <Loader/>}
+      {images.length > 0 && totalPages !== currentPage && !isLoading && (
+      <Button onClick={loadMore}/>
+      )}
+      <ToastContainer />
+    </div>
+  );
 };
 
-ImageGalleryItem.displayName = 'ImageGalleryItem';
-
-export default ImageGalleryItem;
-
+export default App;

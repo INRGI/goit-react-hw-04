@@ -30,7 +30,7 @@ const App = () => {
         
         if (data.results.length === 0) {
           return toast.info('Image not found... 🙁', {
-            position: 'top-right',
+            position: toast.POSITION.TOP_RIGHT,
           });
         }
         
@@ -51,7 +51,7 @@ const App = () => {
 
       } catch {
         toast.error('Something went wrong 😿', {
-          position: 'top-right',
+          position: toast.POSITION.TOP_RIGHT,
         });
       } finally {
         setIsLoading(false);
