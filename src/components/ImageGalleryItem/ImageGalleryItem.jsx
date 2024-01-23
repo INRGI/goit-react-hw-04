@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Img, Li } from './ImageGalleryItem.styled';
 import Modal from '../Modal';
 
-const ImageGalleryItem = React.forwardRef(({ image }, ref) => {
+const ImageGalleryItem = React.forwardRef(function ImageGalleryItem({ image }, ref) {
   const [showModal, setShowModal] = useState(false);
 
   const toggleModal = () => {
@@ -22,7 +22,7 @@ const ImageGalleryItem = React.forwardRef(({ image }, ref) => {
       )}
     </Li>
   )
-})
+});
 
 ImageGalleryItem.propTypes = {
   image: PropTypes.shape({
@@ -32,4 +32,7 @@ ImageGalleryItem.propTypes = {
   }).isRequired,
 };
 
+ImageGalleryItem.displayName = 'ImageGalleryItem';
+
 export default ImageGalleryItem;
+
