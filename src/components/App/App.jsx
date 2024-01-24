@@ -1,6 +1,6 @@
 import SearchBar from '../Searchbar';
 import { useEffect, useRef, useState } from 'react';
-import * as API from '../../services/PixabayApi';
+import * as API from '../../services/UnsplashApi';
 import { ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ImageGallery from '../ImageGallery';

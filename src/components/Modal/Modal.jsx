@@ -1,7 +1,6 @@
 import { createPortal } from "react-dom";
 import { Img, Modalka, Overlay } from "./Modal.styled";
 
-import PropTypes from 'prop-types';
 import { useEffect } from "react";
 
 const modalRoot = document.querySelector('#modal-root');
@@ -38,12 +37,6 @@ const Modal = ({largeImageURL, tags, onClose}) => {
         </Overlay>,
         modalRoot
     );
-};
-
-Modal.propTypes = {
-    largeImageURL: PropTypes.string.isRequired,
-    tags: PropTypes.string.isRequired,
-    onClose: PropTypes.func.isRequired,
 };
 
 export default Modal;

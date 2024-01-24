@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { IoSearchSharp } from "react-icons/io5";
 import { useState } from 'react';
 import { Form, FormButton, Header, Input, Label } from './Searchbar.styled';
@@ -35,10 +34,6 @@ const SearchBar = ({onSubmit}) => {
             </Form>
         </Header>
       );
-};
-
-SearchBar.propTypes = {
-    onSubmit: PropTypes.func.isRequired,
 };
 
 export default SearchBar;
