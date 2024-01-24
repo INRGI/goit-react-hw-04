@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ImageGallery from '../ImageGallery';
 import Button from '../Button';
 import Loader from '../Loader';
+import { Container } from './App.styled';
 
 const App = () => {
   const [searchName, setSearchName] = useState('');
@@ -71,7 +72,7 @@ const App = () => {
   };
 
   return (
-    <div>
+    <Container>
       <SearchBar onSubmit={handleSubmit} />
        
       <ImageGallery images={images} galleryRef={galleryRef} firstNewElementRef={firstNewElementRef} />
@@ -81,7 +82,7 @@ const App = () => {
       <Button onClick={loadMore}/>
       )}
       <ToastContainer />
-    </div>
+    </Container>
   );
 };
 
